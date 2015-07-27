@@ -1,0 +1,78 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Super jeu de fou</title>
+	
+	<script src="/socket.io/socket.io.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+	<script type="text/javascript" src="GLOBALS.js"></script>
+	<script type="text/javascript" src="socket.handler.js"></script>
+	<script type="text/javascript" src="classes.js"></script>
+	<script type="text/javascript" src="game.client.js"></script>
+	
+	
+	<script>
+	$( document ).ready(function() {
+				
+		var canvas = document.getElementById("gameCanvas");
+		Game.play(canvas);
+		
+		$('#username').submit(function (evt) {
+			if($('#name').val() != '')
+			{
+				if(!getPlayerFromId($('#name').val(), onlinePlayers))
+				{					
+					socket.emit('change name', { newid: $('#name').val(), id: player.id } );
+					player.id = $('#name').val();
+				}
+				else
+				{
+					alert("Pseudo déjà utilisé.");
+				}
+			}
+			return false;
+		});
+		
+		$('#sender').submit(function (evt) {
+			if($('#m').val() != '')
+			{
+				player.message = $('#m').val();
+				$('#m').val('');
+				socket.emit('msg', { id: player.id, msg: player.message } );
+			}
+			return false;
+		});
+		
+	});
+	</script>
+	
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      body { font: 13px Helvetica, Arial; }
+	  #sender { position: fixed; bottom: 0; width:100%}
+	  #username { position:fixed; width: 35%; }
+      form { background: #000; padding: 3px; }
+      form input { border: 0; padding: 10px; width: 90%; margin-right: .5%; }
+      form button { width: 9%; background: rgb(130, 224, 255); border: none; padding: 10px; }
+      #messages { list-style-type: none; margin: 0; padding: 0; }
+      #messages li { padding: 5px 10px; }
+      #messages li:nth-child(odd) { background: #eee; }
+	  #online { list-style-type: none; margin: 0; padding: 0; float:right; background-color:lightgreen; }
+	  #online li { padding: 5px 10px; }
+	  #online li:nth-child(odd) { background: #005000; }
+    </style>
+	
+  </head>
+  <body>
+    <ul id="online"></ul>
+    <ul id="messages"></ul>
+	<form action="#" id="username">
+      <input id="name" autocomplete="off" placeholder="PSEUDO" /><button id="but">Ok</button>
+    </form>
+    <form action="#" id="sender">
+      <input id="m" autocomplete="off" placeholder="MESSAGE" /><button>Envoyer</button>
+    </form>
+	
+	<canvas id="gameCanvas"></canvas>
+  </body>
+</html>
