@@ -7,7 +7,8 @@
     "start": "node game.server.js"
   },
   "dependencies": {
-    "express": "latest"
+    "express": "latest",
+	"socket.io": "latest"
   },
   "engines": {
     "node": "latest"
