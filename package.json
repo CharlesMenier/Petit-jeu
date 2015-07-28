@@ -1,13 +1,25 @@
 {
-  "name": "Petit-jeu-temps-réel",
-  "author" : "Chares Ménier",
-  "description": "Petit essai de jeu en temps réel multijoueur en utilisant socket.io et nodeJS",
-  "version": "1.0.0",
-  "dependencies": {
-    "express": "4.0.x",
-    "socket.io": "1.0.x",
+  "name": "Petit-jeu",
+  "version": "0.1.0",
+  "description": "A sample Node.js app using Express 4",
+  "main": "index.js",
+  "scripts": {
+    "start": "node game.server.js"
   },
-  "engine": {
+  "dependencies": {
+    "express": "~4.9.x"
+  },
+  "engines": {
     "node": "0.12.x"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/heroku/node-js-getting-started"
+  },
+  "keywords": [
+    "node",
+    "heroku",
+    "express"
+  ],
+  "license": "MIT"
 }
