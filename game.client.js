@@ -70,20 +70,52 @@ Game.play = function(canvas)
 		}
 	}
 	
-	var init_update_loop = function()
+	var init_timer = function()
+	{
+		setInterval(function()
+		{
+			_dt 		= new Date().getTime() - _dte;
+			_dte 		= new Date().getTime();
+			local_timer += _dt/1000.0;
+		}, 4);
+	}
+	
+		//Loop for the position/inputs/collisions
+		// at 60fps
+	var init_physics_loop = function()
 	{
 		setInterval(function()
 		{
 			update();
+		}, INTERVAL);
+	};
+	
+		//Loop for the rendering
+		//draw all the objects
+		// at 60fps
+	var init_render_loop = function()
+	{
+			//Work out the delta time
+		//dt = lastframetime ? ( (t - this.lastframetime)/1000.0).fixed() : 0.016;
+
+			//Store the last frame time
+		//lastframetime = t;
+		
+		setInterval(function()
+		{
 			draw();
 		}, INTERVAL);
+		
 	};
 		
 	setEventListener(context);
 	setIOHandler();
-	
-	init_update_loop();	
+		
+	init_physics_loop();
+	init_render_loop();
+	init_timer();
 };
+
 
 function _onKeyChange(e, value)
 {

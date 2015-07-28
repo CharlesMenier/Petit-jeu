@@ -17,8 +17,34 @@ var MAXPLAYERS 	= 10;
 var NBPLAYER	= 0;
 var CHECK_FREQUENCY = 5000;		//check game variable every 5000ms
 
+var local_timer	= 0;
+var _dt			= new Date().getTime();
+var _dte		= new Date().getTime();
+
+	// TIMER FOR THE SERVER
+setInterval(function(){
+	_dt 		= new Date().getTime() - _dte;
+	_dte 		= new Date().getTime();
+	local_timer += _dt/1000.0;
+}, 4);
+
+/*app.configure(function() {
+	app.set('port', process.env.OPENSHIFT_NODEJS_PORT || 8080);
+  	app.set('ipaddr', process.env.OPENSHIFT_NODEJS_IP || "127.0.0.1");
+});
+
+server.listen(app.get('port'), app.get('ipaddr'), function(){
+	console.log('Express server listening on  IP: ' + app.get('ipaddr') + ' and port ' + app.get('port'));
+});*/
+
+http.createServer(function (req, res) {
+  res.writeHead(200, {'Content-Type': 'text/plain'});
+  res.end('Hello World\n');
+}).listen(80);
+console.log('Server running at http://90.17.176.27:80/');
+
 	//start listening on the port 3000
-server.listen(3000, function(){ console.log('\t  Starting to listen on *: 3000..'); });
+//server.listen(3000, function(){ console.log('\t  Starting to listen on *: 3000..'); });
 
 	//send the index file when someone connect
 app.get('/', function(req, res){
@@ -50,7 +76,8 @@ io.sockets.on('connection', function(client)
 						{
 							NBPLAYER 	: NBPLAYER+1,
 							MAXPLAYERS	: MAXPLAYERS,
-							PLAYERS		: PLAYERS
+							PLAYERS		: PLAYERS,
+							TIMER		: { dt: _dt, dte: _dte, time: local_timer }
 						});
 		}
 		else
@@ -182,11 +209,12 @@ var init_check_loop = function()
 
 var check_game_variables = function()
 {
-	client.emit('check infos',
+	io.sockets.emit('check infos',
 				{
 						NBPLAYER 	: NBPLAYER,
 						MAXPLAYERS	: MAXPLAYERS,
-						PLAYERS		: PLAYERS
+						PLAYERS		: PLAYERS,
+						TIMER		: { dt: _dt, dte: _dte, time: local_timer }
 				});
 };
 

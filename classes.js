@@ -169,14 +169,28 @@ Game	= {};
 			y : y
 		};
 		
+		//the player movements
+		this.move = {
+			x: 0,
+			y: 0
+		};
+		
 		//size of the player
 		this.size = {
 			width	: 15,
 			height 	: 15
 		};
 		
-		//move speed in pixels/s
-		this.speed	= 200;
+		//acceleration in pixels/frame
+		this.accelerate	= 150;
+		
+		// speed limit
+		// pixels/frame
+		// 120p/s at 60fps
+		this.speed = 2;
+		
+		//friction coeeficient
+		this.friction = 0.98;
 		
 		//current message that is displayed
 		this.message = '';
@@ -197,8 +211,6 @@ Game	= {};
 		//speed at which the player can fire rockets
 		this.shotSpeed = 400;
 		
-		//
-		this.timer = Date.now();
 	}
 	
 	Player.prototype.update = function(step, worldWidth, worldHeight)
@@ -210,13 +222,23 @@ Game	= {};
 		var oldY = this.pos.y;
 		
 		// check controls and move the player accordingly
-		if(Game.controls.up) 		this.pos.y -= this.speed * step;
-		else if(Game.controls.down)	this.pos.y += this.speed * step;
-		if(Game.controls.left) 		this.pos.x -= this.speed * step;
-		else if(Game.controls.right)	this.pos.x += this.speed * step;
+		if(Game.controls.up && this.move.y > -this.speed) 			this.move.y -= this.accelerate * step /30;
+		else if(Game.controls.up && this.move.y <= -this.speed)		this.move.y = -this.speed;
+		if(Game.controls.down && this.move.y < this.speed)			this.move.y += this.accelerate * step /30;
+		else if(Game.controls.down && this.move.y >= this.speed)	this.move.y = this.speed;
+		if(Game.controls.left && this.move.x > -this.speed) 		this.move.x -= this.accelerate * step /30;
+		else if(Game.controls.left && this.move.y <= -this.speed)	this.move.x = -this.speed;
+		if(Game.controls.right && this.move.x < this.speed)			this.move.x += this.accelerate * step /30;
+		else if(Game.controls.right && this.move.y >= this.speed)	this.move.x = this.speed;
 		
 		// get the direction of the player
-		var dir = { x : (this.pos.x - oldX)/this.speed, y : (this.pos.y - oldY)/this.speed };
+		var dir = { x : (this.pos.x - oldX)/this.accelerate, y : (this.pos.y - oldY)/this.accelerate };
+		
+		this.pos.x += this.move.x * this.accelerate * step;
+		this.pos.y += this.move.y * this.accelerate * step;
+		
+		this.move.x *= this.friction;
+		this.move.y *= this.friction;
 		
 		// save the current movement if there is one as the last move
 		if(dir.x !== 0 || dir.y !== 0) 			this.lastMove = { x: dir.x, y: dir.y };

@@ -104,6 +104,9 @@ function client_check_infos(data)
 		//we copy the data received from server locally
 	MAXPLAYER	= data.MAXPLAYER;
 	NBPLAYER	= data.NBPLAYER;
+	local_timer = data.TIMER.time;
+	_dt			= data.TIMER.dt;
+	_dte		= data.TIMER.dte;
 	
 		//we clear the array for the check loop
 	onlinePlayers = [];

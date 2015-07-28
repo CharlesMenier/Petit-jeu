@@ -13,3 +13,8 @@ var player = {};
 var camera = {};
 
 var socket;
+
+	//TIMER VARIABLES
+var local_timer	= 0.016;
+var _dt			= new Date().getTime();
+var _dte		= new Date().getTime();
