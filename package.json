@@ -7,14 +7,14 @@
     "start": "node game.server.js"
   },
   "dependencies": {
-    "express": "~4.9.x"
+    "express": "latest"
   },
   "engines": {
-    "node": "0.12.x"
+    "node": "latest"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/heroku/node-js-getting-started"
+    "url": "https://github.com/CharlesMenier/Petit-jeu"
   },
   "keywords": [
     "node",
